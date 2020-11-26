@@ -1,4 +1,5 @@
-import swingRAD.setProperties
+import swingRAD.*
+import swingRAD.sMenuBar.SMenuBar
 import javax.swing.JFrame
 import javax.swing.JTextArea
 import javax.swing.JFileChooser
@@ -7,7 +8,6 @@ import java.io.BufferedReader
 import java.lang.StringBuilder
 import java.io.IOException
 import java.io.FileWriter
-import javax.swing.JMenuBar
 import javax.swing.JMenu
 import javax.swing.JMenuItem
 import javax.swing.JScrollPane
@@ -15,7 +15,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
-class BlocNotas {
+class BlocNotas: JFrame() {
 
     private var ventana: JFrame = JFrame("Mi bloc de Notas")
     private var notas: JTextArea
@@ -78,31 +78,46 @@ class BlocNotas {
     init {
 
         // Inicializa todos los elementos del menu
-        val menu = JMenuBar()
+        val menu = SMenuBar()
+
         val archivo = JMenu("Archivo")
-        val ayuda = JMenu("Ayuda")
         val nuevo = JMenuItem("Nuevo")
         val abrir = JMenuItem("Abrir...")
         val guardar = JMenuItem("Guardar")
         val salir = JMenuItem("Salir")
+
+
+        val tema = JMenu("Tema")
+        val claro = JMenuItem("Claro")
+        val oscuro = JMenuItem("Oscuro")
+
+        val ayuda = JMenu("Ayuda")
         val acercaDe = JMenuItem("Acerca de...")
+
 
         // Añade los elementos al menu
         archivo.add(nuevo)
         archivo.add(abrir)
         archivo.add(guardar)
         archivo.add(salir)
+
+        tema.add(claro)
+        tema.add(oscuro)
+
         ayuda.add(acercaDe)
+
         menu.add(archivo)
+        menu.add(tema)
         menu.add(ayuda)
+        add(menu)
 
-        // Añade la barra de menu a la ventana
-        ventana.jMenuBar = menu
-
-        // Cra un area de texto con scroll y lo añade a la ventana
+        // Crea un area de texto con scroll y lo añade a la ventana
         notas = JTextArea()
+        notas.setProperties(0, 0, 1270, 653, border = null)
+
         val scrollNotas = JScrollPane(notas)
-        ventana.add(scrollNotas)
+        scrollNotas.setProperties(2, 60, 1270, 653)
+        add(scrollNotas)
 
         // Asigna a cada menuItem su listener
         nuevo.addActionListener { notas.text = "" }
@@ -110,10 +125,8 @@ class BlocNotas {
         guardar.addActionListener { guardarArchivo() }
         salir.addActionListener { exitProcess(0) }
 
-        // Hace visible la ventana
-        ventana.setSize(1366, 728)
-        ventana.isVisible = true
-        ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+        setMainBar("bloc de notas")
+        setProperties()
     }
 
 }
