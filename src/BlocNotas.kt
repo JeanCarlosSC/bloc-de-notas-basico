@@ -11,14 +11,16 @@ import javax.swing.JMenuBar
 import javax.swing.JMenu
 import javax.swing.JMenuItem
 import javax.swing.JScrollPane
-import java.awt.event.ActionEvent
 import java.util.logging.Level
 import java.util.logging.Logger
+import kotlin.system.exitProcess
 
 class BlocNotas {
-    var ventana: JFrame
-    var notas: JTextArea
-    fun abrirArchivo() {
+
+    private var ventana: JFrame = JFrame("Mi bloc de Notas")
+    private var notas: JTextArea
+
+    private fun abrirArchivo() {
         val fileChooser = JFileChooser()
         fileChooser.fileSelectionMode = JFileChooser.FILES_ONLY
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(ventana)) {
@@ -51,7 +53,7 @@ class BlocNotas {
         }
     }
 
-    fun guardarArchivo() {
+    private fun guardarArchivo() {
         val fileChooser = JFileChooser()
         fileChooser.fileSelectionMode = JFileChooser.FILES_ONLY
         if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(ventana)) {
@@ -74,7 +76,6 @@ class BlocNotas {
     }
 
     init {
-        ventana = JFrame("Mi bloc de Notas")
 
         // Inicializa todos los elementos del menu
         val menu = JMenuBar()
@@ -104,15 +105,15 @@ class BlocNotas {
         ventana.add(scrollNotas)
 
         // Asigna a cada menuItem su listener
-        nuevo.addActionListener { e: ActionEvent? -> notas.text = "" }
-        abrir.addActionListener { e: ActionEvent? -> abrirArchivo() }
-        guardar.addActionListener { e: ActionEvent? -> guardarArchivo() }
-        salir.addActionListener { e: ActionEvent? -> System.exit(0) }
+        nuevo.addActionListener { notas.text = "" }
+        abrir.addActionListener { abrirArchivo() }
+        guardar.addActionListener { guardarArchivo() }
+        salir.addActionListener { exitProcess(0) }
 
         // Hace visible la ventana
         ventana.setSize(1366, 728)
         ventana.isVisible = true
         ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-        ventana.setProperties()
     }
+
 }
