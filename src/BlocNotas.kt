@@ -1,24 +1,23 @@
 import swingRAD.*
 import swingRAD.sMenuBar.SMenuBar
-import javax.swing.JFrame
-import javax.swing.JTextArea
-import javax.swing.JFileChooser
+import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
 import java.io.FileReader
 import java.io.BufferedReader
 import java.lang.StringBuilder
 import java.io.IOException
 import java.io.FileWriter
-import javax.swing.JMenu
-import javax.swing.JMenuItem
-import javax.swing.JScrollPane
 import java.util.logging.Level
 import java.util.logging.Logger
+import javax.swing.*
 import kotlin.system.exitProcess
 
 class BlocNotas: JFrame() {
 
     private var ventana: JFrame = JFrame("Mi bloc de Notas")
     private var notas: JTextArea
+
+    //private val pila = Pila
 
     private fun abrirArchivo() {
         val fileChooser = JFileChooser()
@@ -94,7 +93,6 @@ class BlocNotas: JFrame() {
         val ayuda = JMenu("Ayuda")
         val acercaDe = JMenuItem("Acerca de...")
 
-
         // Añade los elementos al menu
         archivo.add(nuevo)
         archivo.add(abrir)
@@ -113,7 +111,7 @@ class BlocNotas: JFrame() {
 
         // Crea un area de texto con scroll y lo añade a la ventana
         notas = JTextArea()
-        notas.setProperties(0, 0, 1270, 653, border = null)
+        notas.setProperties(5, 5, 1260, 643, border = null)
 
         val scrollNotas = JScrollPane(notas)
         scrollNotas.setProperties(2, 60, 1270, 653)
@@ -127,6 +125,29 @@ class BlocNotas: JFrame() {
 
         setMainBar("bloc de notas")
         setProperties()
+
+        notas.addKeyListener(object: KeyListener{
+            override fun keyTyped(e: KeyEvent?) {
+            }
+
+            override fun keyPressed(e: KeyEvent?) {
+                if (e!!.keyCode == KeyEvent.VK_SPACE) {
+                    JOptionPane.showMessageDialog(null, "se presiona espacio")
+                }
+                if (e!!.keyCode == KeyEvent.VK_BACK_SPACE) {
+                    JOptionPane.showMessageDialog(null, "se presiona BACKSPACE")
+                }
+            }
+
+            override fun keyReleased(e: KeyEvent?) {
+                if (e!!.keyCode == KeyEvent.VK_SPACE) {
+                    JOptionPane.showMessageDialog(null, "se suelta espacio")
+                }
+                if (e!!.keyCode == KeyEvent.VK_BACK_SPACE) {
+                    JOptionPane.showMessageDialog(null, "se suelta BACKSPACE")
+                }
+            }
+        })
     }
 
 }
