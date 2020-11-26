@@ -7,6 +7,7 @@ import java.io.BufferedReader
 import java.lang.StringBuilder
 import java.io.IOException
 import java.io.FileWriter
+import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 import javax.swing.*
@@ -17,7 +18,7 @@ class BlocNotas: JFrame() {
     private var ventana: JFrame = JFrame("Mi bloc de Notas")
     private var notas: JTextArea
 
-    //private val pila = Pila
+    private val pila: Stack<String> = Stack()
 
     private fun abrirArchivo() {
         val fileChooser = JFileChooser()
@@ -75,43 +76,67 @@ class BlocNotas: JFrame() {
     }
 
     init {
+        // pila
+        pila.add("")
 
-        // Inicializa todos los elementos del menu
+        // menu
         val menu = SMenuBar()
+        add(menu)
 
         val archivo = JMenu("Archivo")
+        menu.add(archivo)
+
         val nuevo = JMenuItem("Nuevo")
-        val abrir = JMenuItem("Abrir...")
-        val guardar = JMenuItem("Guardar")
-        val salir = JMenuItem("Salir")
-
-
-        val tema = JMenu("Tema")
-        val claro = JMenuItem("Claro")
-        val oscuro = JMenuItem("Oscuro")
-
-        val ayuda = JMenu("Ayuda")
-        val acercaDe = JMenuItem("Acerca de...")
-
-        // Añade los elementos al menu
         archivo.add(nuevo)
+
+        val abrir = JMenuItem("Abrir...")
         archivo.add(abrir)
+
+        val guardar = JMenuItem("Guardar")
         archivo.add(guardar)
+
+        val salir = JMenuItem("Salir")
         archivo.add(salir)
 
+        val tema = JMenu("Tema")
+        menu.add(tema)
+
+        val claro = JMenuItem("Claro")
         tema.add(claro)
+
+        val oscuro = JMenuItem("Oscuro")
         tema.add(oscuro)
 
-        ayuda.add(acercaDe)
-
-        menu.add(archivo)
-        menu.add(tema)
+        val ayuda = JMenu("Ayuda")
         menu.add(ayuda)
-        add(menu)
+
+        val acercaDe = JMenuItem("Acerca de...")
+        ayuda.add(acercaDe)
 
         // Crea un area de texto con scroll y lo añade a la ventana
         notas = JTextArea()
         notas.setProperties(5, 5, 1260, 643, border = null)
+        notas.addKeyListener(object: KeyListener{
+            override fun keyTyped(e: KeyEvent?) {
+            }
+
+            override fun keyPressed(e: KeyEvent?) {
+                if (e!!.keyCode == KeyEvent.VK_SPACE) {
+                    pila.add(notas.text)
+                }
+                if(e.keyCode == KeyEvent.VK_Z && e.isControlDown) {
+                    if (pila.size > 1)
+                        pila.removeLast()
+                    notas.text = pila.lastElement()
+                }
+            }
+
+            override fun keyReleased(e: KeyEvent?) {
+                if (e!!.keyCode == KeyEvent.VK_BACK_SPACE) {
+                    pila.add(notas.text)
+                }
+            }
+        })
 
         val scrollNotas = JScrollPane(notas)
         scrollNotas.setProperties(2, 60, 1270, 653)
@@ -123,31 +148,9 @@ class BlocNotas: JFrame() {
         guardar.addActionListener { guardarArchivo() }
         salir.addActionListener { exitProcess(0) }
 
+        // frame
         setMainBar("bloc de notas")
         setProperties()
-
-        notas.addKeyListener(object: KeyListener{
-            override fun keyTyped(e: KeyEvent?) {
-            }
-
-            override fun keyPressed(e: KeyEvent?) {
-                if (e!!.keyCode == KeyEvent.VK_SPACE) {
-                    JOptionPane.showMessageDialog(null, "se presiona espacio")
-                }
-                if (e!!.keyCode == KeyEvent.VK_BACK_SPACE) {
-                    JOptionPane.showMessageDialog(null, "se presiona BACKSPACE")
-                }
-            }
-
-            override fun keyReleased(e: KeyEvent?) {
-                if (e!!.keyCode == KeyEvent.VK_SPACE) {
-                    JOptionPane.showMessageDialog(null, "se suelta espacio")
-                }
-                if (e!!.keyCode == KeyEvent.VK_BACK_SPACE) {
-                    JOptionPane.showMessageDialog(null, "se suelta BACKSPACE")
-                }
-            }
-        })
     }
 
 }
